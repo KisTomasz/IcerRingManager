@@ -4,6 +4,7 @@
 from DataBaseController import DataBaseController
 import sys
 import random
+import time
 
 dataBaseConroller = DataBaseController("test.db")
 
@@ -31,6 +32,8 @@ elif arg[1] == "findName":
     dataBaseConroller.findByName(arg[2])
 elif arg[1] == "findSurname":
     dataBaseConroller.findBySurname(arg[2])
+elif arg[1] == "time":
+    print time.asctime(time.localtime(time.time() + 3600))
 elif arg[1] == "createTable":
     dataBaseConroller.createCustomersTable()
 elif arg[1] == "readFile":

@@ -5,9 +5,23 @@ from Customer import Customer
 from DataBaseController import DataBaseController
 
 
+def update_clock():
+    now = time.strftime("%H:%M:%S")
+    label.configure(text=now)
+    updateList()
+    root.after(1000, update_clock)
+
+def updateList():
+     for entry in lbIceRingMembers:
+        # listbox.delete(entry)
+        print entry
+        pass
+
 def getLocalTime():
     return time.asctime(time.localtime(time.time()))
-   # ? print "Local current time :", localtime
+
+def getTimeAfterHour():
+    return time.asctime(time.localtime(time.time() + 3600))
 
 def set_list(event):
     listbox.delete(0, END)
@@ -27,7 +41,7 @@ def get_list(event):
     index = listbox.curselection()[0]
     # get the line's text
     seltext = [listbox.get(index)]
-    seltext += [getLocalTime()]
+    seltext += [getLocalTime(), getTimeAfterHour()]
     # delete previous text in enter1
     enter1.delete(0, 50)
     # now display the selected text
@@ -52,4 +66,9 @@ enter1 = Entry(root, width=50, bg='yellow')
 # pressing the return key will update edited line
 enter1.bind('<Return>', set_list)
 enter1.pack(fill=X)
+
+label = Label(root, text="")
+update_clock()
+label.pack()
+
 mainloop()
