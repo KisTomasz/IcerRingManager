@@ -6,20 +6,25 @@ from Customer import Customer
 from DataBaseController import DataBaseController
 
 
+def updateSummary():
+    # godzina 15 lyzwy 8zl
+    moneyString = summaryField.cget("text")
+    print str.split(moneyString)
+
+    count, lyzwy, czas, razem = str.split(moneyString)
+
+    count = int(count) +1
+    lyzwy = int(lyzwy) + 8
+    czas = int(czas) + 15
+    razem = czas + lyzwy
+    summaryField.configure(text =  str(count) + "\t\t " + str(lyzwy) + "\t\t " + str(czas) + "\t\t " + str(razem))
+
 def update_clock():
     now = time.strftime("%H:%M:%S")
     label.configure(text=now)
-    updateList()
     root.after(1000, update_clock)
 
-def updateList():
-     # for entry in lbIceRingMembers:
-        # listbox.delete(entry)
-        # print entry
-    pass
-
 def getLocalTime():
-    # return time.asctime(time.localtime(time.time()))
     return time.localtime(time.time())
 
 def getTimeAfterHour():
@@ -37,10 +42,7 @@ def set_list(event):
 def update2ndList():
     for i, entity in enumerate(lbIceRingMembers.get(0, END)):
         newEntity = list(entity)
-        # newEntity.pop(1)
-        # newEntity.insert(1, time.asctime(getLocalTime()))
 
-        # seltext += [time.mktime(end_dt) - time.mktime(start_dt)]
         dateString = newEntity[2]
         parsedTime = time.strptime(dateString, '%a %b %d %H:%M:%S %Y')
         time.mktime(parsedTime)
@@ -50,17 +52,15 @@ def update2ndList():
         timeToInsert = '%02d:%02d' % (m, s)
         newEntity.pop(3)
         newEntity.insert(3, timeToInsert)
-        # print newEntity
 
         lbIceRingMembers.delete(i)
         lbIceRingMembers.insert(i, tuple(newEntity))
+        if timeDiff < 3595:
+            lbIceRingMembers.itemconfig(i, {'fg': 'red'})
     root.after(1000, update2ndList)
 
 def get_list(event):
-    """
-    function to read the listbox selection
-    and put the result in an entry widget
-    """
+
     # get selected line index
     index = listbox.curselection()[0]
     # get the line's text
@@ -70,9 +70,8 @@ def get_list(event):
     end_dt = getTimeAfterHour()
     print time.mktime(end_dt) - time.mktime(start_dt)
     seltext += [time.mktime(end_dt) - time.mktime(start_dt)]
-    # delete previous text in enter1
     enter1.delete(0, 50)
-    # now display the selected text
+    updateSummary()
     lbIceRingMembers.insert(0, tuple(seltext))
     update2ndList()
 
@@ -100,4 +99,10 @@ label = Label(root, text="")
 update_clock()
 label.pack()
 
+label2 = Label(root, text = "Ilosc_osob \t hajs_za_lyzwy \t hajs_za_godziny \t razem")
+label2.pack(fill=X)
+
+summaryField = Label(root, text = "0 \t\t 0 \t\t  0  \t\t 0")
+print summaryField.cget("text")
+summaryField.pack(fill=X)
 mainloop()
