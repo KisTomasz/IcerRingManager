@@ -12,10 +12,11 @@ def update_clock():
     root.after(1000, update_clock)
 
 def updateList():
-     for entry in lbIceRingMembers:
+     # for entry in lbIceRingMembers:
         # listbox.delete(entry)
-        print entry
-        pass
+        # print entry
+    print type(lbIceRingMembers)
+    pass
 
 def getLocalTime():
     return time.asctime(time.localtime(time.time()))
