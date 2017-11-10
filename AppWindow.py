@@ -21,23 +21,14 @@ def updateSummary():
 
 def update_clock():
     now = time.strftime("%H:%M:%S")
-    label.configure(text=now)
+    clock.configure(text=now)
     root.after(1000, update_clock)
 
 def getLocalTime():
     return time.localtime(time.time())
 
-def getTimeAfterHour():
-    return time.localtime(time.time() + 3600)
-
-def set_list(event):
-    listbox.delete(0, END)
-    dataBaseConroller = DataBaseController("test.db")
-    pattern = enter1.get()
-    foundCursor = dataBaseConroller.findByName(pattern)
-    for entity in foundCursor:
-        listbox.insert(0, entity)
-        pass
+def getTimeAfterMinutes(minutes = 60):
+    return time.localtime(time.time() + minutes * 60)
 
 def update2ndList():
     for i, entity in enumerate(lbIceRingMembers.get(0, END)):
@@ -65,9 +56,9 @@ def get_list(event):
     index = listbox.curselection()[0]
     # get the line's text
     seltext = [listbox.get(index)]
-    seltext += [time.asctime(getLocalTime()), time.asctime(getTimeAfterHour())]
+    seltext += [time.asctime(getLocalTime()), time.asctime(getTimeAfterMinutes())]
     start_dt = getLocalTime()
-    end_dt = getTimeAfterHour()
+    end_dt = getTimeAfterMinutes()
     print time.mktime(end_dt) - time.mktime(start_dt)
     seltext += [time.mktime(end_dt) - time.mktime(start_dt)]
     enter1.delete(0, 50)
@@ -91,13 +82,20 @@ lbIceRingMembers = Listbox(root)
 lbIceRingMembers.pack(fill=X)
 
 enter1 = Entry(root, width=50, bg='yellow')
-# pressing the return key will update edited line
-enter1.bind('<Return>', set_list)
+def displayMatchingPeopleByName(event):
+    listbox.delete(0, END)
+    dataBaseConroller = DataBaseController("test.db")
+    pattern = enter1.get()
+    foundCursor = dataBaseConroller.findByName(pattern)
+    for entity in foundCursor:
+        listbox.insert(0, entity)
+        pass
+enter1.bind('<Return>', displayMatchingPeopleByName)
 enter1.pack(fill=X)
 
-label = Label(root, text="")
+clock = Label(root, text="")
 update_clock()
-label.pack()
+clock.pack()
 
 label2 = Label(root, text = "Ilosc_osob \t hajs_za_lyzwy \t hajs_za_godziny \t razem")
 label2.pack(fill=X)

@@ -35,12 +35,6 @@ class DataBaseController:
     def findByName(self, name):
         name = "%" + name + "%"
         cursor = self.conn.execute("SELECT * FROM customers WHERE name LIKE ?", (name,))
-        # for row in cursor:
-        #     print "ID = ", row[0]
-        #     print "imie = ", row[1]
-        #     print "nazwisko = ", row[2]
-        #     print "typ biletu = ", row[3], "\n"
-        # conn.close()
         return cursor
 
     def findBySurname(self, surname):
