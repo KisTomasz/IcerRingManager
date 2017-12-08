@@ -1,0 +1,17 @@
+Aktualny stan
+1)lista osobó, wejscie, wyjscie,  (czy już przekroczyłą czas)
+2) dodać komuś czas  (jako opcja)
+
+
+3) dodatka baza: ile za łyżwy, ile za czas, łącznie, liczba osób (nie trzeba trzymać lsity)
+4) (ewentualnie lsita ludzi na lodowisku jeden dzień, żeby nie stracic)
+
+5) jakis timer do trackowania ile komuś zostało czasu na lodowisku
+
+6) modyfikacja osoby na lodowsku. Na przyklad usuniecie jej jak się rozmyśli
+7) pokazywanie na aktualnym stanie lodowiska czy osoba wzięłą łyżwy
+8) szukanie po osobach znajdujących się aktualnie na lodowsku, by łatwiej było kooś wyrzucić
+
+
+____________________________________
+propozycja: redis
