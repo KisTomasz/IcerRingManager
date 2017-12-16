@@ -83,7 +83,7 @@ class mainFrame(wx.Frame):
         self.iceRingStaticText.Wrap(-1)
         rightFlexGridSizer.Add(self.iceRingStaticText, 0, wx.ALL, 5)
 
-        self.iceRingListCtrl = wx.ListCtrl(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT)
+        self.iceRingListCtrl = wx.ListCtrl(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT | wx.LC_SINGLE_SEL)
         self.iceRingListCtrl.InsertColumn(0, "Imię")
         self.iceRingListCtrl.InsertColumn(1, "Nazwisko")
         self.iceRingListCtrl.InsertColumn(2, "Czy łyżwy")
@@ -163,7 +163,7 @@ class mainFrame(wx.Frame):
         idx = self.searchListCtrl.GetNextSelected(-1)
         nameObj = self.searchListCtrl.GetItem(idx, 1)
         surnameObj = self.searchListCtrl.GetItem(idx, 2)
-        bootsTaken = True
+        bootsTaken = "Tak"
         self.iceRingListCtrl.Append((nameObj.GetText(), surnameObj.GetText(), bootsTaken))
 
         countText = self.peopleCounterTextCtrl.GetValue()
@@ -186,15 +186,20 @@ class mainFrame(wx.Frame):
         menu.Append(1, u'Dodaj czas')
 
         # menu.Bind(wx.EVT_MENU, self.printDupa)
-        self.Bind(wx.EVT_MENU, self.printOne, id=addClientMenuItem.GetId())
+        self.Bind(wx.EVT_MENU, self.onRemoveFromIceRingClicked, id=addClientMenuItem.GetId())
         self.Bind(wx.EVT_MENU, self.printTwo, id=1)
         self.PopupMenu(menu)
         # self.Bind(wx.EVT_MENU, self.printDupa, id=self.addClientMenuItem.GetId())
 
         menu.Destroy()
 
-    def printOne(self, evt):
-        print "1"
+    def onRemoveFromIceRingClicked(self, evt):
+        idx = self.iceRingListCtrl.GetNextSelected(-1)
+        self.iceRingListCtrl.DeleteItem(idx)
+
+        countText = self.peopleCounterTextCtrl.GetValue()
+        countInt = int(countText) - 1
+        self.peopleCounterTextCtrl.SetLabelText(str(countInt))
 
     def printTwo(self, evt):
         print "2"
