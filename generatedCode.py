@@ -185,13 +185,19 @@ class mainFrame(wx.Frame):
         menu.Append(addClientMenuItem)
         menu.Append(1, u'Dodaj czas')
 
-
+        # menu.Bind(wx.EVT_MENU, self.printDupa)
+        self.Bind(wx.EVT_MENU, self.printOne, id=addClientMenuItem.GetId())
+        self.Bind(wx.EVT_MENU, self.printTwo, id=1)
         self.PopupMenu(menu)
-        self.Bind(wx.EVT_MENU, self.printDupa, id=self.addClientMenuItem.GetId())
+        # self.Bind(wx.EVT_MENU, self.printDupa, id=self.addClientMenuItem.GetId())
+
         menu.Destroy()
 
-    def printDupa(self, id):
-        print "id"
+    def printOne(self, evt):
+        print "1"
+
+    def printTwo(self, evt):
+        print "2"
 
 if __name__ == "__main__":
     # wxGlade default stuff
