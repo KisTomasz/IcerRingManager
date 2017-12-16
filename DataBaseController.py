@@ -41,11 +41,7 @@ class DataBaseController:
         surname = "%" + surname + "%"
         conn = sqlite3.connect(self.dataBaseName)
         cursor = conn.execute("SELECT * FROM customers WHERE surname LIKE ?", (surname,))
-        for row in cursor:
-            print "ID = ", row[0]
-            print "imie = ", row[1]
-            print "nazwisko = ", row[2]
-            print "typ bileu = ", row[3], "\n"
+        return cursor
 
     def __del__(self):
         self.conn.close()
