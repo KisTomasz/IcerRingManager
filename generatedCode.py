@@ -46,7 +46,7 @@ class mainFrame(wx.Frame):
         leftSideGridSizer.Add(boxSizerForDataEntry, 1, wx.ALIGN_CENTER | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 5)
 
         self.searchListCtrl = wx.ListCtrl(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT)
-        leftSideGridSizer.Add(self.searchListCtrl, 1, wx.ALL | wx.EXPAND | wx.SHAPED, 5)
+        leftSideGridSizer.Add(self.searchListCtrl, 1, wx.ALL | wx.EXPAND, 5)
 
         boxSizerButtons = wx.BoxSizer(wx.HORIZONTAL)
 
