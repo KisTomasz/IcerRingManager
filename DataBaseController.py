@@ -33,12 +33,12 @@ class DataBaseController:
         self.conn.commit()
 
     def findByName(self, name):
-        name = "%" + name + "%"
+        name = name + "%"
         cursor = self.conn.execute("SELECT * FROM customers WHERE name LIKE ?", (name,))
         return cursor
 
     def findBySurname(self, surname):
-        surname = "%" + surname + "%"
+        surname = surname + "%"
         conn = sqlite3.connect(self.dataBaseName)
         cursor = conn.execute("SELECT * FROM customers WHERE surname LIKE ?", (surname,))
         return cursor

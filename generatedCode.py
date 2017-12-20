@@ -10,7 +10,7 @@
 import wx
 
 from DataBaseController import DataBaseController
-
+import to_be_moved
 
 ###########################################################################
 ## Class mainFrame
@@ -38,15 +38,16 @@ class mainFrame(wx.Frame):
 
         boxSizerForDataEntry = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.nameTextCtrl = wx.TextCtrl(self, wx.ID_ANY, u"Imię...", wx.DefaultPosition, wx.DefaultSize, 0)
-        boxSizerForDataEntry.Add(self.nameTextCtrl, 1, wx.ALL | wx.EXPAND, 5)
-
         self.surnameTextCtrl = wx.TextCtrl(self, wx.ID_ANY, u"Nazwisko...", wx.DefaultPosition, wx.DefaultSize, 0)
         boxSizerForDataEntry.Add(self.surnameTextCtrl, 1, wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.ALL, 5)
+
+        self.nameTextCtrl = wx.TextCtrl(self, wx.ID_ANY, u"Imię...", wx.DefaultPosition, wx.DefaultSize, 0)
+        boxSizerForDataEntry.Add(self.nameTextCtrl, 1, wx.ALL | wx.EXPAND, 5)
 
         leftSideGridSizer.Add(boxSizerForDataEntry, 1, wx.ALIGN_CENTER | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 5)
 
         self.searchListCtrl = wx.ListCtrl(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT)
+        self.searchListCtrl.SetFont(wx.Font(11, 74, 90, 90, False, "Arial"))
         self.searchListCtrl.InsertColumn(0, "id")
         self.searchListCtrl.InsertColumn(1, "Imię")
         self.searchListCtrl.InsertColumn(2, "Nazwisko")
@@ -84,9 +85,13 @@ class mainFrame(wx.Frame):
         rightFlexGridSizer.Add(self.iceRingStaticText, 0, wx.ALL, 5)
 
         self.iceRingListCtrl = wx.ListCtrl(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT | wx.LC_SINGLE_SEL)
+        self.iceRingListCtrl.SetFont(wx.Font(11, 74, 90, 90, False, "Arial"))
         self.iceRingListCtrl.InsertColumn(0, "Imię")
         self.iceRingListCtrl.InsertColumn(1, "Nazwisko")
         self.iceRingListCtrl.InsertColumn(2, "Czy łyżwy")
+        self.iceRingListCtrl.InsertColumn(3, "Czas wejścia")
+        self.iceRingListCtrl.InsertColumn(4, "Zakupionych godzin")
+        self.iceRingListCtrl.InsertColumn(5, "Pozostało")
 
         rightFlexGridSizer.Add(self.iceRingListCtrl, 0, wx.ALL | wx.EXPAND, 5)
 
@@ -108,6 +113,8 @@ class mainFrame(wx.Frame):
 
         self.SetSizer(mainLayoutManager)
         self.Layout()
+        self.m_timer = wx.Timer()
+        self.m_timer.SetOwner(self, wx.ID_ANY)
         self.menubar = wx.MenuBar(0)
         self.mainMenu = wx.Menu()
         self.addClientMenuItem = wx.MenuItem(self.mainMenu, wx.ID_ANY, u"Dodaj nowego klienta", wx.EmptyString,
@@ -132,6 +139,8 @@ class mainFrame(wx.Frame):
         self.enterIceringButton.Bind(wx.EVT_BUTTON, self.onEnterRiderButton)
         self.searchListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onSearchListCtrlItemSelected)
         self.iceRingListCtrl.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnIceringParticipantRightClick)
+        self.Bind(wx.EVT_TIMER, self.onTick, id=wx.ID_ANY)
+        self.m_timer.Start(milliseconds=1000) #uncomment to start timer
 
     def __del__(self):
         pass
@@ -142,6 +151,8 @@ class mainFrame(wx.Frame):
         dataBaseConroller = DataBaseController("test.db")
         foundCursor = dataBaseConroller.findByName(enteredMsg)
 
+        self.searchListCtrl.DeleteAllItems()
+
         for entity in foundCursor:
             print entity
             self.searchListCtrl.Append(entity)
@@ -151,6 +162,8 @@ class mainFrame(wx.Frame):
         enteredMsg = self.surnameTextCtrl.GetValue()
         dataBaseConroller = DataBaseController("test.db")
         foundCursor = dataBaseConroller.findBySurname(enteredMsg)
+
+        self.searchListCtrl.DeleteAllItems()
 
         for entity in foundCursor:
             print entity
@@ -164,7 +177,7 @@ class mainFrame(wx.Frame):
         nameObj = self.searchListCtrl.GetItem(idx, 1)
         surnameObj = self.searchListCtrl.GetItem(idx, 2)
         bootsTaken = "Tak"
-        self.iceRingListCtrl.Append((nameObj.GetText(), surnameObj.GetText(), bootsTaken))
+        self.iceRingListCtrl.Append((nameObj.GetText(), surnameObj.GetText(), bootsTaken, to_be_moved.getCurrentTime(), '1', ''))
 
         countText = self.peopleCounterTextCtrl.GetValue()
         countInt = int(countText) + 1
@@ -203,6 +216,10 @@ class mainFrame(wx.Frame):
 
     def printTwo(self, evt):
         print "2"
+
+    def onTick(self, evt):
+        print "Ticked"
+        to_be_moved.updateTimesOnParticipantList(self.iceRingListCtrl)
 
 if __name__ == "__main__":
     # wxGlade default stuff
