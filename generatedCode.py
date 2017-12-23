@@ -141,6 +141,7 @@ class mainFrame(wx.Frame):
         self.iceRingListCtrl.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnIceringParticipantRightClick)
         self.Bind(wx.EVT_TIMER, self.onTick, id=wx.ID_ANY)
         self.m_timer.Start(milliseconds=1000) #uncomment to start timer
+        self.Bind(wx.EVT_MENU, self.onAddNewCustomer, id=self.addClientMenuItem.GetId())
 
     def __del__(self):
         pass
@@ -177,7 +178,7 @@ class mainFrame(wx.Frame):
         nameObj = self.searchListCtrl.GetItem(idx, 1)
         surnameObj = self.searchListCtrl.GetItem(idx, 2)
         bootsTaken = "Tak"
-        self.iceRingListCtrl.Append((nameObj.GetText(), surnameObj.GetText(), bootsTaken, to_be_moved.getCurrentTime(), '1', ''))
+        self.iceRingListCtrl.Append((nameObj.GetText(), surnameObj.GetText(), bootsTaken, to_be_moved.getCurrentTime(), '0', ''))
 
         countText = self.peopleCounterTextCtrl.GetValue()
         countInt = int(countText) + 1
@@ -220,6 +221,10 @@ class mainFrame(wx.Frame):
     def onTick(self, evt):
         print "Ticked"
         to_be_moved.updateTimesOnParticipantList(self.iceRingListCtrl)
+
+    def onAddNewCustomer(self, evt):
+        dialog = to_be_moved.MyDialog1(None)
+        dialog.Show()
 
 if __name__ == "__main__":
     # wxGlade default stuff
