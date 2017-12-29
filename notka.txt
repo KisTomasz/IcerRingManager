@@ -16,3 +16,6 @@ Aktualny stan
 ____________________________________
 propozycja: redis
 framework dla okienek http://docs.wxwidgets.org/3.0/overview_python.html
+
+
+https://mborgerson.com/creating-an-executable-from-a-python-script/

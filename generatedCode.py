@@ -9,6 +9,7 @@
 
 import wx
 
+from Bookkeeper import Bookkeeper
 from DataBaseController import DataBaseController
 import to_be_moved
 
@@ -20,6 +21,13 @@ class mainFrame(wx.Frame):
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=wx.EmptyString, pos=wx.DefaultPosition,
                           size=wx.Size(1074, 606), style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
+
+        #######################################################################
+        # NOT GUI ELEMENTS HERE
+        self.bookkeeper = Bookkeeper()
+
+        #####################################################################
+
 
         self.SetSizeHintsSz(wx.DefaultSize, wx.DefaultSize)
         self.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_3DLIGHT))
@@ -47,7 +55,7 @@ class mainFrame(wx.Frame):
         leftSideGridSizer.Add(boxSizerForDataEntry, 1, wx.ALIGN_CENTER | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 5)
 
         self.searchListCtrl = wx.ListCtrl(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT)
-        self.searchListCtrl.SetFont(wx.Font(11, 74, 90, 90, False, "Arial"))
+        self.searchListCtrl.SetFont(wx.Font(14, 74, 90, 90, False, "Arial"))
         self.searchListCtrl.InsertColumn(0, "id")
         self.searchListCtrl.InsertColumn(1, "Imię")
         self.searchListCtrl.InsertColumn(2, "Nazwisko")
@@ -64,7 +72,7 @@ class mainFrame(wx.Frame):
         controllButtonsBSizer.Add(self.modifyDataButton, 0, wx.ALL, 5)
 
         self.NonStandardEntry = wx.Button(self, wx.ID_ANY, u"Niestandardowe wejście", wx.DefaultPosition,
-                                          wx.DefaultSize, 0)
+            wx.DefaultSize, 0)
         controllButtonsBSizer.Add(self.NonStandardEntry, 0, wx.ALL, 5)
 
         leftSideGridSizer.Add(controllButtonsBSizer, 1, wx.EXPAND, 5)
@@ -85,7 +93,7 @@ class mainFrame(wx.Frame):
         rightFlexGridSizer.Add(self.iceRingStaticText, 0, wx.ALL, 5)
 
         self.iceRingListCtrl = wx.ListCtrl(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT | wx.LC_SINGLE_SEL)
-        self.iceRingListCtrl.SetFont(wx.Font(11, 74, 90, 90, False, "Arial"))
+        self.iceRingListCtrl.SetFont(wx.Font(13, 74, 90, 90, False, "Arial")) # musi być minimum 13. Nie widac inaczej
         self.iceRingListCtrl.InsertColumn(0, "Imię")
         self.iceRingListCtrl.InsertColumn(1, "Nazwisko")
         self.iceRingListCtrl.InsertColumn(2, "Czy łyżwy")
@@ -98,14 +106,13 @@ class mainFrame(wx.Frame):
         counterBSizer = wx.BoxSizer(wx.VERTICAL)
 
         self.peopleCounterStaticText = wx.StaticText(self, wx.ID_ANY, u"Liczba osób:", wx.DefaultPosition,
-                                                     wx.DefaultSize, 0)
+            wx.DefaultSize, 0)
         self.peopleCounterStaticText.Wrap(-1)
         counterBSizer.Add(self.peopleCounterStaticText, 0, wx.TOP, 5)
 
-        self.peopleCounterTextCtrl = wx.TextCtrl(self, wx.ID_ANY, '0', wx.DefaultPosition, wx.DefaultSize, 0)
-        self.peopleCounterTextCtrl.Enable(False)
+        self.peopleCounterTextCtrl = wx.TextCtrl(self, wx.ID_ANY, '0', wx.DefaultPosition, wx.DefaultSize, wx.TE_READONLY)
 
-        counterBSizer.Add(self.peopleCounterTextCtrl, 0, wx.ALL, 5)
+        counterBSizer.Add(self.peopleCounterTextCtrl, 0, wx.ALL, 5) # dupa
 
         rightFlexGridSizer.Add(counterBSizer, 1, wx.EXPAND, 5)
 
@@ -134,14 +141,17 @@ class mainFrame(wx.Frame):
         self.Centre(wx.BOTH)
 
         # Connect Events
-        self.nameTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onNameEntered)
-        self.surnameTextCtrl.Bind(wx.EVT_TEXT_ENTER, self.onSurnamenEntered)
+        self.nameTextCtrl.Bind(wx.EVT_TEXT, self.onNameEntered)
+        self.surnameTextCtrl.Bind(wx.EVT_TEXT, self.onSurnamenEntered)
         self.enterIceringButton.Bind(wx.EVT_BUTTON, self.onEnterRiderButton)
+        self.modifyDataButton.Bind(wx.EVT_BUTTON, self.onModifyClientData)
+        self.NonStandardEntry.Bind(wx.EVT_BUTTON, self.onCustomEntry)
         self.searchListCtrl.Bind(wx.EVT_LIST_ITEM_SELECTED, self.onSearchListCtrlItemSelected)
         self.iceRingListCtrl.Bind(wx.EVT_LIST_ITEM_RIGHT_CLICK, self.OnIceringParticipantRightClick)
         self.Bind(wx.EVT_TIMER, self.onTick, id=wx.ID_ANY)
         self.m_timer.Start(milliseconds=1000) #uncomment to start timer
         self.Bind(wx.EVT_MENU, self.onAddNewCustomer, id=self.addClientMenuItem.GetId())
+        self.Bind(wx.EVT_MENU, self.printRaport, id=self.dummyMenuItem.GetId())
 
     def __del__(self):
         pass
@@ -155,7 +165,7 @@ class mainFrame(wx.Frame):
         self.searchListCtrl.DeleteAllItems()
 
         for entity in foundCursor:
-            print entity
+            # print entity
             self.searchListCtrl.Append(entity)
 
     def onSurnamenEntered(self, evt):
@@ -167,7 +177,7 @@ class mainFrame(wx.Frame):
         self.searchListCtrl.DeleteAllItems()
 
         for entity in foundCursor:
-            print entity
+            # print entity
             self.searchListCtrl.Append(entity)
 
     def onSearchListCtrlItemSelected(self, evt):
@@ -179,52 +189,75 @@ class mainFrame(wx.Frame):
         surnameObj = self.searchListCtrl.GetItem(idx, 2)
         bootsTaken = "Tak"
         self.iceRingListCtrl.Append((nameObj.GetText(), surnameObj.GetText(), bootsTaken, to_be_moved.getCurrentTime(), '0', ''))
-
-        countText = self.peopleCounterTextCtrl.GetValue()
-        countInt = int(countText) + 1
-        self.peopleCounterTextCtrl.SetLabelText(str(countInt))
+        countInt = self.iceRingListCtrl.GetItemCount()
+        self.peopleCounterTextCtrl.SetValue(str(countInt))
 
     def OnIceringParticipantRightClick(self, evt):
         idx = evt.GetIndex()
         nameObj = self.iceRingListCtrl.GetItem(idx, 0)
         surnameObj = self.iceRingListCtrl.GetItem(idx, 1)
         # self.iceRingListCtrl.Append((nameObj.GetText(), surnameObj.GetText(), False)) for development
-        #menu.Destroy()  # destroy to avoid mem leak
         menu = wx.Menu()
-
         addClientMenuItem = wx.MenuItem(self.mainMenu, wx.ID_ANY, u"Wypuść", wx.EmptyString,
             wx.ITEM_NORMAL)
-
-
-        menu.Append(addClientMenuItem)
-        menu.Append(1, u'Dodaj czas')
-
+        addTimeMenuItem = wx.MenuItem(self.mainMenu, wx.ID_ANY, u"Dodaj czas", wx.EmptyString,
+                                        wx.ITEM_NORMAL)
+        menu.Append(addClientMenuItem.GetId(), u"Wypuść")
+        menu.Append(addTimeMenuItem.GetId(), u'Dodaj czas')
         # menu.Bind(wx.EVT_MENU, self.printDupa)
         self.Bind(wx.EVT_MENU, self.onRemoveFromIceRingClicked, id=addClientMenuItem.GetId())
-        self.Bind(wx.EVT_MENU, self.printTwo, id=1)
+        self.Bind(wx.EVT_MENU, self.addTimeForClient, id=addTimeMenuItem.GetId())
         self.PopupMenu(menu)
-        # self.Bind(wx.EVT_MENU, self.printDupa, id=self.addClientMenuItem.GetId())
-
-        menu.Destroy()
+        menu.Destroy() # destroy to avoid mem leak
 
     def onRemoveFromIceRingClicked(self, evt):
         idx = self.iceRingListCtrl.GetNextSelected(-1)
+
+        ####################################################
+        # Book keepere work here
+        name = self.iceRingListCtrl.GetItem(idx, 0).GetText() # name
+        surname = self.iceRingListCtrl.GetItem(idx, 1).GetText() #surname
+        boots_taken = self.iceRingListCtrl.GetItem(idx, 2).GetText() #boots_taken
+        hours_count = self.iceRingListCtrl.GetItem(idx, 4).GetText() #hours_cout
+
+        self.bookkeeper.saveEntry(client_id=0,
+            client_name=name,
+            client_surname=surname,
+            wereBoots=boots_taken,
+            hoursCount=hours_count)
+
+        ####################################################
         self.iceRingListCtrl.DeleteItem(idx)
+        countInt = self.iceRingListCtrl.GetItemCount()
+        self.peopleCounterTextCtrl.SetValue(str(countInt))
 
-        countText = self.peopleCounterTextCtrl.GetValue()
-        countInt = int(countText) - 1
-        self.peopleCounterTextCtrl.SetLabelText(str(countInt))
+    def addTimeForClient(self, evt):
+        index = self.iceRingListCtrl.GetNextSelected(-1)
+        boughtHoursStr = self.iceRingListCtrl.GetItem(index, 4).GetText()
+        updated_bought_hours = int(boughtHoursStr) + 1
+        self.iceRingListCtrl.SetStringItem(index, 4, str(updated_bought_hours))
 
-    def printTwo(self, evt):
-        print "2"
+    def printRaport(self, evt):
+        self.bookkeeper.printAll()
 
     def onTick(self, evt):
-        print "Ticked"
         to_be_moved.updateTimesOnParticipantList(self.iceRingListCtrl)
 
     def onAddNewCustomer(self, evt):
-        dialog = to_be_moved.MyDialog1(None)
-        dialog.Show()
+        dialog = to_be_moved.AddNewClientDialog(None)
+        dialog.ShowModal()
+        dialog.Destroy()
+
+    def onModifyClientData(self, evt):
+        dialog = to_be_moved.ModifyClientDataDialog(None, self.searchListCtrl)
+        dialog.ShowModal()
+        dialog.Destroy()
+
+    def onCustomEntry(self, evt):
+        dialog = to_be_moved.CustomEntryDialog(None, self.searchListCtrl, self.iceRingListCtrl,
+            self.peopleCounterTextCtrl)
+        dialog.ShowModal()
+        dialog.Destroy()
 
 if __name__ == "__main__":
     # wxGlade default stuff

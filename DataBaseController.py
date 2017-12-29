@@ -32,6 +32,26 @@ class DataBaseController:
               VALUES (NULL, ?, ?, ?)", (name, surname, ticketType));
         self.conn.commit()
 
+
+    def modifyCustomerName(self, id, name):
+        self.conn.execute("UPDATE customers SET name = ? WHERE ID = ?",  (name, id))
+        self.conn.commit()
+        print "Total number of rows updated :", self.conn.total_changes
+        cursor = self.conn.execute("SELECT id, name, surname, ticket_type FROM CUSTOMERS WHERE ID = ?", (id,))
+        for row in cursor:
+            print "ID = ", row[0]
+            print "imie = ", row[1]
+            print "nazwisko = ", row[2]
+            print "typ biletu = ", row[3], "\n"
+
+    def modifyCustomerSurname(self, id, name):
+        pass
+        # TODO implement me
+
+    def modifyCustomerTicketType(self, id, name):
+        pass
+        # TODO implement me
+
     def findByName(self, name):
         name = name + "%"
         cursor = self.conn.execute("SELECT * FROM customers WHERE name LIKE ?", (name,))
