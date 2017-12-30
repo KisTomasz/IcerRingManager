@@ -92,13 +92,13 @@ class DataBaseController:
             print "nazwisko = ", row[2]
             print "typ biletu = ", row[3], "\n"
 
-    def modifyCustomerSurname(self, id, name):
-        pass
-        # TODO implement me
+    def modifyCustomerSurname(self, id, surname):
+        self.conn.execute("UPDATE customers SET surname = ? WHERE ID = ?", (surname, id))
+        self.conn.commit()
 
-    def modifyCustomerTicketType(self, id, name):
-        pass
-        # TODO implement me
+    def modifyCustomerTicketType(self, id, ticket_type):
+        self.conn.execute("UPDATE customers SET ticket_type = ? WHERE ID = ?", (ticket_type, id))
+        self.conn.commit()
 
     def findByName(self, name):
         name = name + "%"

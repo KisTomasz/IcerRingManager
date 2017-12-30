@@ -177,9 +177,13 @@ class ModifyClientDataDialog(wx.Dialog):
     def onModifyDataAccepted(self, evt):
         id = self.id_obj.GetText()
         new_name = self.m_textCtrl5.GetValue()
+        new_surname = self.m_textCtrl4.GetValue()
+        new_ticket_type = self.m_choice1.GetStringSelection()
         dataBaseConroller = DataBaseController("test.db")
         print id
         dataBaseConroller.modifyCustomerName(id=id, name=new_name)
+        dataBaseConroller.modifyCustomerSurname(id=id, surname=new_surname)
+        dataBaseConroller.modifyCustomerTicketType(id=id, ticket_type=new_ticket_type)
         print 'accepted'
         self.Destroy()
 
@@ -225,9 +229,6 @@ class CustomEntryDialog(wx.Dialog):
         m_choice1Choices = [u"ulgowy", u"normalny", u"promocja"]
         self.m_choice1 = wx.Choice(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, m_choice1Choices, 0)
         self.m_choice1.SetSelection(0)
-        # for ticketType in m_choice1Choices:
-        #     if ticketType == self.ticket_type_from_database:
-        #         # self.m_choice1.SetSelectio
         self.m_choice1.SetSelection(self.m_choice1.FindString(self.ticket_type_from_database))
         bSizer5.Add(self.m_choice1, 0, wx.ALL, 5)
 
