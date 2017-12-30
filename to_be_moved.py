@@ -110,7 +110,6 @@ class AddNewClientDialog(wx.Dialog):
 # _____________________________________________________________________________________________________
 class ModifyClientDataDialog(wx.Dialog):
     def __init__(self, parent, searchListCtrl):
-        print 'dupa'
         wx.Dialog.__init__(self, parent, id=wx.ID_ANY, title=wx.EmptyString, pos=wx.DefaultPosition,
              size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE)
 
@@ -119,6 +118,9 @@ class ModifyClientDataDialog(wx.Dialog):
         bSizer5 = wx.BoxSizer(wx.VERTICAL)
 
         idx = searchListCtrl.GetNextSelected(-1)
+        if idx == -1:
+            self.Destroy()
+
         self.id_obj = searchListCtrl.GetItem(idx, 0)
         self.nameObj = searchListCtrl.GetItem(idx, 1)
         surnameObj = searchListCtrl.GetItem(idx, 2)
@@ -184,7 +186,7 @@ class ModifyClientDataDialog(wx.Dialog):
 
 # _____________________________________________________________________________________________________
 class CustomEntryDialog(wx.Dialog):
-    def __init__(self, parent, searchListCtrl, iceRingPeopleListCtrl, counterTextCtrl):
+    def __init__(self, parent, searchListCtrl, iceRingPeopleListCtrl, counterTextCtrl, bookkeper):
         wx.Dialog.__init__(self, parent, id=wx.ID_ANY, title=wx.EmptyString, pos=wx.DefaultPosition,
              size=wx.DefaultSize, style=wx.DEFAULT_DIALOG_STYLE)
 
@@ -194,8 +196,12 @@ class CustomEntryDialog(wx.Dialog):
 
         self.iceringListCtrl = iceRingPeopleListCtrl
         self.counterTextCtrl = counterTextCtrl
+        self.bookkeper = bookkeper
 
         idx = searchListCtrl.GetNextSelected(-1)
+        if idx == -1:
+            self.Destroy()
+
         self.id_obj = searchListCtrl.GetItem(idx, 0)
         self.nameObj = searchListCtrl.GetItem(idx, 1)
         self.surnameObj = searchListCtrl.GetItem(idx, 2)
@@ -291,9 +297,13 @@ class CustomEntryDialog(wx.Dialog):
         seleceted_hours_count = self.m_choice_hours.GetStringSelection()
         print id, name, surname, selected_ticket_type, selected_boots_option, seleceted_hours_count
         self.iceringListCtrl.Append(
-            (name, surname, selected_boots_option, getCurrentTime(), seleceted_hours_count, ''))
+            (name, surname, selected_boots_option, getCurrentTime(), seleceted_hours_count, '', id))
         countInt = self.iceringListCtrl.GetItemCount()
         self.counterTextCtrl.SetValue(str(countInt))
+
+        # register_entry_on_board(self, client_id, ticket_type):
+        self.bookkeper.register_entry_on_board(int(id), selected_ticket_type)
+
         self.Destroy()
 
     def enterRiderToIcering(self):

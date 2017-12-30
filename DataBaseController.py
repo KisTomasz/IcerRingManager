@@ -17,6 +17,54 @@ class DataBaseController:
                  TICKET_TYPE    TEXT     NOT NULL)''')
         print "Table created customers successfully";
 
+    def createEntriesTable(self):
+        print "Opened database successfully";
+
+        self.conn.execute('''CREATE TABLE entries
+            (ENTRY_ID     INTEGER     PRIMARY KEY  AUTOINCREMENT,
+            DATE          DATE        NOT NULL,
+            CUSTOMER_ID   INTEGER     NOT NULL,
+            BOUGHT_HOURS  INTEGER     NOT NULL,
+            HOURS_COST    INTEGER     NOT NULL,
+            BOOTS_COST    INTEGER     NOT NULL)''')
+        self.conn.commit()
+        print "Table entries created successfully";
+
+    def insertEntry(self, date, customer_id, bought_hours, hours_cost, boots_cost):
+        self.conn.execute('''INSERT INTO entries
+            VALUES (NULL
+                , ?
+                , ?
+                , ?
+                , ?
+                , ?)''', (date, customer_id, bought_hours, hours_cost, boots_cost))
+        self.conn.commit()
+
+    def getAllEntries(self):
+        cursor = self.conn.execute("SELECT * FROM entries")
+        return cursor
+
+    def printAllEntries(self):
+        cursor = self.conn.execute("SELECT * FROM entries")
+        for row in cursor:
+            print "ENTRY_ID = ", row[0]
+            print "DATE = ", row[1]
+            print "CUSTOMER_ID = ", row[2]
+            print "BOUGHT_HOURS = ", row[3]
+            print "HOURS_COST = ", row[4]
+            print "BOOTS_COST = ", row[5], "\n"
+
+    def getEntriesByDate(self):
+        cursor = self.conn.execute("SELECT * FROM entries")
+
+    def dropEntriesTable(self):
+        # TODO implement this type of table
+        print "Opened database successfully";
+
+        self.conn.execute('DROP TABLE ENTRIES')
+        self.conn.commit()
+        print "Table entries dropped successfully";
+
     def printAllCustomers(self):
         cursor = self.conn.execute("SELECT id, name, surname, ticket_type FROM CUSTOMERS")
         for row in cursor:

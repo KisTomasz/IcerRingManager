@@ -67,6 +67,7 @@ class mainFrame(wx.Frame):
 
         self.enterIceringButton = wx.Button(self, wx.ID_ANY, u"Wpuść", wx.DefaultPosition, wx.DefaultSize, 0)
         controllButtonsBSizer.Add(self.enterIceringButton, 0, wx.ALL, 5)
+        self.enterIceringButton.Enabled = False # TODO when would it work
 
         self.modifyDataButton = wx.Button(self, wx.ID_ANY, u"Modyfikuj dane", wx.DefaultPosition, wx.DefaultSize, 0)
         controllButtonsBSizer.Add(self.modifyDataButton, 0, wx.ALL, 5)
@@ -100,6 +101,7 @@ class mainFrame(wx.Frame):
         self.iceRingListCtrl.InsertColumn(3, "Czas wejścia")
         self.iceRingListCtrl.InsertColumn(4, "Zakupionych godzin")
         self.iceRingListCtrl.InsertColumn(5, "Pozostało")
+        self.iceRingListCtrl.InsertColumn(6, "id")
 
         rightFlexGridSizer.Add(self.iceRingListCtrl, 0, wx.ALL | wx.EXPAND, 5)
 
@@ -194,21 +196,24 @@ class mainFrame(wx.Frame):
 
     def OnIceringParticipantRightClick(self, evt):
         idx = evt.GetIndex()
-        nameObj = self.iceRingListCtrl.GetItem(idx, 0)
-        surnameObj = self.iceRingListCtrl.GetItem(idx, 1)
-        # self.iceRingListCtrl.Append((nameObj.GetText(), surnameObj.GetText(), False)) for development
-        menu = wx.Menu()
-        addClientMenuItem = wx.MenuItem(self.mainMenu, wx.ID_ANY, u"Wypuść", wx.EmptyString,
-            wx.ITEM_NORMAL)
-        addTimeMenuItem = wx.MenuItem(self.mainMenu, wx.ID_ANY, u"Dodaj czas", wx.EmptyString,
-                                        wx.ITEM_NORMAL)
-        menu.Append(addClientMenuItem.GetId(), u"Wypuść")
-        menu.Append(addTimeMenuItem.GetId(), u'Dodaj czas')
-        # menu.Bind(wx.EVT_MENU, self.printDupa)
-        self.Bind(wx.EVT_MENU, self.onRemoveFromIceRingClicked, id=addClientMenuItem.GetId())
-        self.Bind(wx.EVT_MENU, self.addTimeForClient, id=addTimeMenuItem.GetId())
-        self.PopupMenu(menu)
-        menu.Destroy() # destroy to avoid mem leak
+
+        try:
+            nameObj = self.iceRingListCtrl.GetItem(idx, 0)
+            surnameObj = self.iceRingListCtrl.GetItem(idx, 1)
+            # self.iceRingListCtrl.Append((nameObj.GetText(), surnameObj.GetText(), False)) for development
+            menu = wx.Menu()
+            addClientMenuItem = wx.MenuItem(self.mainMenu, wx.ID_ANY, u"Wypuść", wx.EmptyString,
+                wx.ITEM_NORMAL)
+            addTimeMenuItem = wx.MenuItem(self.mainMenu, wx.ID_ANY, u"Dodaj czas", wx.EmptyString,
+                                            wx.ITEM_NORMAL)
+            menu.Append(addClientMenuItem.GetId(), u"Wypuść")
+            menu.Append(addTimeMenuItem.GetId(), u'Dodaj czas')
+            self.Bind(wx.EVT_MENU, self.onRemoveFromIceRingClicked, id=addClientMenuItem.GetId())
+            self.Bind(wx.EVT_MENU, self.addTimeForClient, id=addTimeMenuItem.GetId())
+            self.PopupMenu(menu)
+            menu.Destroy() # destroy to avoid mem leak
+        except:
+            print "Nothing selected on iceringListCtrl"
 
     def onRemoveFromIceRingClicked(self, evt):
         idx = self.iceRingListCtrl.GetNextSelected(-1)
@@ -218,13 +223,21 @@ class mainFrame(wx.Frame):
         name = self.iceRingListCtrl.GetItem(idx, 0).GetText() # name
         surname = self.iceRingListCtrl.GetItem(idx, 1).GetText() #surname
         boots_taken = self.iceRingListCtrl.GetItem(idx, 2).GetText() #boots_taken
-        hours_count = self.iceRingListCtrl.GetItem(idx, 4).GetText() #hours_cout
-
+        hours_count = int(self.iceRingListCtrl.GetItem(idx, 4).GetText()) #hours_cout
+        customer_id = int(self.iceRingListCtrl.GetItem(idx, 6).GetText()) #customer_id
+        were_boots = True
         self.bookkeeper.saveEntry(client_id=0,
             client_name=name,
             client_surname=surname,
             wereBoots=boots_taken,
             hoursCount=hours_count)
+
+        if boots_taken == 'Tak':
+            were_boots = True
+        elif boots_taken == 'Nie':
+            were_boots = False
+
+        self.bookkeeper.save_entry_to_data_base(customer_id=customer_id, hours_count=hours_count, were_boots=were_boots)
 
         ####################################################
         self.iceRingListCtrl.DeleteItem(idx)
@@ -249,15 +262,22 @@ class mainFrame(wx.Frame):
         dialog.Destroy()
 
     def onModifyClientData(self, evt):
-        dialog = to_be_moved.ModifyClientDataDialog(None, self.searchListCtrl)
-        dialog.ShowModal()
-        dialog.Destroy()
+        try:
+            dialog = to_be_moved.ModifyClientDataDialog(None, self.searchListCtrl)
+            dialog.ShowModal()
+            dialog.Destroy()
+        except:
+            print "No record selected on searchList"
 
     def onCustomEntry(self, evt):
-        dialog = to_be_moved.CustomEntryDialog(None, self.searchListCtrl, self.iceRingListCtrl,
-            self.peopleCounterTextCtrl)
-        dialog.ShowModal()
-        dialog.Destroy()
+       # dialog = None
+        try:
+            dialog = to_be_moved.CustomEntryDialog(None, self.searchListCtrl, self.iceRingListCtrl,
+                self.peopleCounterTextCtrl, self.bookkeeper)
+            dialog.ShowModal()
+            dialog.Destroy()
+        except:
+            print "No record selected on searchList"
 
 if __name__ == "__main__":
     # wxGlade default stuff
