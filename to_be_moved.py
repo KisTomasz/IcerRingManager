@@ -258,13 +258,18 @@ class CustomEntryDialog(wx.Dialog):
         bSizer5.Add(self.m_choice_boots, 0, wx.ALL, 5)
 
         # summary textlabel
-        self.summary_StaticText = wx.StaticText(self, wx.ID_ANY, u"Zrobić podsumowanie ile do zapłacenia",
+        self.summary_StaticText = wx.StaticText(self, wx.ID_ANY, u"koszt butow:\nkoszt godzin:\nrazem:",
             wx.DefaultPosition,
             wx.DefaultSize,
             0)
-
         self.summary_StaticText.Wrap(-1)
+        font = self.GetFont()
+        font.SetPointSize(13)
+        self.summary_StaticText.SetFont(font)
         bSizer5.Add(self.summary_StaticText, 0, wx.ALL, 5)
+
+        self.calculateButton = wx.Button(self, wx.ID_ANY, u"Przelicz", wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer5.Add(self.calculateButton, 0, wx.ALL, 5)
 
         m_sdbSizer1 = wx.StdDialogButtonSizer()
         self.m_sdbSizer1OK = wx.Button(self, wx.ID_OK)
@@ -282,6 +287,7 @@ class CustomEntryDialog(wx.Dialog):
         self.Centre(wx.BOTH)
         # Connect Events
         self.m_sdbSizer1OK.Bind(wx.EVT_BUTTON, self.onCustomEntryAccepted)
+        self.calculateButton.Bind(wx.EVT_BUTTON, self.on_calculate_cost)
 
     def __del__(self):
         print "del"
@@ -306,6 +312,26 @@ class CustomEntryDialog(wx.Dialog):
         self.bookkeper.register_entry_on_board(int(id), selected_ticket_type)
 
         self.Destroy()
+
+    def on_calculate_cost(self, evt):
+        selected_boots_option = self.m_choice_boots.GetStringSelection()
+        seleceted_hours_count = int(self.m_choice_hours.GetStringSelection())
+        selected_ticket_type = self.m_choice1.GetStringSelection()
+        ticket_cost = self.bookkeper.price_list.getTicketPriceByName(selected_ticket_type)
+
+        boots_cost = 0
+        if selected_boots_option == 'Tak' and not selected_ticket_type == 'promocja':
+            boots_cost = self.bookkeper.price_list.boots
+
+        hours_cost = ticket_cost * seleceted_hours_count
+        total_cost = hours_cost + boots_cost
+
+        cost_string = self._makeCostString(hours_cost, boots_cost)
+        self.summary_StaticText.SetLabelText(cost_string)
+
+    def _makeCostString(self, hours_cost, boots_cost):
+        return str("koszt butow: %s\nkoszt godzin: %s\nrazem: %s" % (boots_cost, hours_cost, hours_cost + boots_cost))
+
 
     def enterRiderToIcering(self):
         pass

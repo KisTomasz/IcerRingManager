@@ -39,10 +39,3 @@ class PriceList:
             return self.promotion_ticket
         else:
             return "Nie ma takiej nazwy"
-
-    def _read_price_list_from_config_file(self):
-        config_file = open("ceny.txt", "r")
-        lista = config_file.read()
-        config_file.close()
-        people = lista.split("\n")
-        people.remove("")
