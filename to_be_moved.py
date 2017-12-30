@@ -66,6 +66,15 @@ class AddNewClientDialog(wx.Dialog):
         self.m_textCtrl5 = wx.TextCtrl(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
         bSizer5.Add(self.m_textCtrl5, 0, wx.ALL | wx.EXPAND, 5)
 
+        #   school textlabel
+        self.school_StaticText = wx.StaticText(self, wx.ID_ANY, u"Szkoła", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.school_StaticText.Wrap(-1)
+        bSizer5.Add(self.school_StaticText, 0, wx.ALL, 5)
+
+        #   school text controller
+        self.school_textctrl = wx.TextCtrl(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer5.Add(self.school_textctrl, 0, wx.ALL | wx.EXPAND, 5)
+
         #   ticketType textlabel
         self.ticketTypeStaticText = wx.StaticText(self, wx.ID_ANY, u"Typ biletu:", wx.DefaultPosition, wx.DefaultSize, 0)
         self.ticketTypeStaticText.Wrap(-1)
@@ -101,9 +110,10 @@ class AddNewClientDialog(wx.Dialog):
     def onAddingCustomerAccepted(self, event):
         name = self.m_textCtrl5.GetValue()
         surname = self.m_textCtrl4.GetValue()
+        school = self.school_textctrl.GetValue()
         ticketType = self.m_choice1.GetString(self.m_choice1.GetCurrentSelection())
         dataBaseConroller = DataBaseController()
-        dataBaseConroller.insertCustomer(name, surname, ticketType)
+        dataBaseConroller.insertCustomer(name, surname, ticketType, school)
         self.Destroy()
 
 
@@ -143,6 +153,15 @@ class ModifyClientDataDialog(wx.Dialog):
         self.m_textCtrl5 = wx.TextCtrl(self, wx.ID_ANY, self.nameObj.GetText(), wx.DefaultPosition, wx.DefaultSize, 0)
         bSizer5.Add(self.m_textCtrl5, 0, wx.ALL | wx.EXPAND, 5)
 
+        #   school textlabel
+        self.school_StaticText = wx.StaticText(self, wx.ID_ANY, u"Szkoła", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.school_StaticText.Wrap(-1)
+        bSizer5.Add(self.school_StaticText, 0, wx.ALL, 5)
+
+        #   school text controller
+        self.school_textctrl = wx.TextCtrl(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0)
+        bSizer5.Add(self.school_textctrl, 0, wx.ALL | wx.EXPAND, 5)
+
         #   ticketType textlabel
         self.ticketTypeStaticText = wx.StaticText(self, wx.ID_ANY, u"Typ biletu:", wx.DefaultPosition, wx.DefaultSize,
                                                   0)
@@ -178,12 +197,14 @@ class ModifyClientDataDialog(wx.Dialog):
         id = self.id_obj.GetText()
         new_name = self.m_textCtrl5.GetValue()
         new_surname = self.m_textCtrl4.GetValue()
+        new_school = self.school_textctrl.GetValue()
         new_ticket_type = self.m_choice1.GetStringSelection()
         dataBaseConroller = DataBaseController()
         print id
         dataBaseConroller.modifyCustomerName(id=id, name=new_name)
         dataBaseConroller.modifyCustomerSurname(id=id, surname=new_surname)
         dataBaseConroller.modifyCustomerTicketType(id=id, ticket_type=new_ticket_type)
+        dataBaseConroller.modifyCustomerSchool(id=id, school_name=new_school)
         print 'accepted'
         self.Destroy()
 

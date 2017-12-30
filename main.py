@@ -27,7 +27,7 @@ arg = sys.argv
 if arg[1] == "printAll":
     dataBaseConroller.printAllCustomers()
 elif arg[1] == "insert":
-    dataBaseConroller.insertCustomer(arg[2], arg[3], arg[4])
+    dataBaseConroller.insertCustomer(arg[2], arg[3], arg[4], arg[5])
 elif arg[1] == "findName":
     dataBaseConroller.findByName(arg[2])
 elif arg[1] == "findSurname":
@@ -36,6 +36,8 @@ elif arg[1] == "time":
     print time.asctime(time.localtime(time.time() + 3600))
 elif arg[1] == "createTable":
     dataBaseConroller.createCustomersTable()
+elif arg[1] == "addSchoolColumn":
+    dataBaseConroller.addSchoolColumn()
 elif arg[1] == "createEntries":
     dataBaseConroller.createEntriesTable()
 elif arg[1] == "printEntries":

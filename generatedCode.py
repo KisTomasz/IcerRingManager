@@ -60,6 +60,7 @@ class mainFrame(wx.Frame):
         self.searchListCtrl.InsertColumn(1, "Imię")
         self.searchListCtrl.InsertColumn(2, "Nazwisko")
         self.searchListCtrl.InsertColumn(3, "typ biletu")
+        self.searchListCtrl.InsertColumn(4, u"szkoła")
 
         leftSideGridSizer.Add(self.searchListCtrl, 0, wx.ALL | wx.EXPAND, 5)
 
@@ -94,7 +95,7 @@ class mainFrame(wx.Frame):
         rightFlexGridSizer.Add(self.iceRingStaticText, 0, wx.ALL, 5)
 
         self.iceRingListCtrl = wx.ListCtrl(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT | wx.LC_SINGLE_SEL)
-        self.iceRingListCtrl.SetFont(wx.Font(13, 74, 90, 90, False, "Arial")) # musi być minimum 13. Nie widac inaczej
+        self.iceRingListCtrl.SetFont(wx.Font(14, 74, 90, 90, False, "Arial")) # musi być minimum 13. Nie widac inaczej
         self.iceRingListCtrl.InsertColumn(0, "Imię")
         self.iceRingListCtrl.InsertColumn(1, "Nazwisko")
         self.iceRingListCtrl.InsertColumn(2, "Czy łyżwy")

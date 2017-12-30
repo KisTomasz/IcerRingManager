@@ -14,8 +14,19 @@ class DataBaseController:
                  (ID INTEGER PRIMARY KEY     AUTOINCREMENT,
                  NAME           TEXT     NOT NULL,
                  SURNAME        TEXT     NOT NULL,
-                 TICKET_TYPE    TEXT     NOT NULL)''')
+                 TICKET_TYPE    TEXT     NOT NULL,
+                 SCHOOL         TEXT')''')
         print "Table created customers successfully";
+
+    def dropCustomersTable(self):
+        self.conn.execute('DROP TABLE customers')
+        self.conn.commit()
+        print "Table customers dropped successfully";
+
+    def addSchoolColumn(self): #to removed temp solution
+        self.conn.execute('ALTER TABLE customers ADD COLUMN school TEXT')
+        self.conn.commit()
+        print "Added school to customers successfully";
 
     def createEntriesTable(self):
         print "Opened database successfully";
@@ -59,8 +70,6 @@ class DataBaseController:
 
     def dropEntriesTable(self):
         # TODO implement this type of table
-        print "Opened database successfully";
-
         self.conn.execute('DROP TABLE ENTRIES')
         self.conn.commit()
         print "Table entries dropped successfully";
@@ -75,9 +84,9 @@ class DataBaseController:
 
         print "Operation done successfully";
 
-    def insertCustomer(self, name, surname, ticketType):
+    def insertCustomer(self, name, surname, ticketType, school_name):
         self.conn.execute("INSERT INTO customers \
-              VALUES (NULL, ?, ?, ?)", (name, surname, ticketType));
+              VALUES (NULL, ?, ?, ?, ?)", (name, surname, ticketType, school_name));
         self.conn.commit()
 
 
@@ -94,6 +103,10 @@ class DataBaseController:
 
     def modifyCustomerSurname(self, id, surname):
         self.conn.execute("UPDATE customers SET surname = ? WHERE ID = ?", (surname, id))
+        self.conn.commit()
+
+    def modifyCustomerSchool(self, id, school_name):
+        self.conn.execute("UPDATE customers SET school = ? WHERE ID = ?", (school_name, id))
         self.conn.commit()
 
     def modifyCustomerTicketType(self, id, ticket_type):
