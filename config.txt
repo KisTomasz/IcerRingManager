@@ -1,0 +1,4 @@
+[ceny]
+normalny = 11
+ulgowy = 6
+buty = 8
