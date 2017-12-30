@@ -11,16 +11,7 @@ class Bookkeeper:
         self.people_onBoard = {}
         self.money_from_hours = 0
         self.money_from_boots = 0
-        self.boots_price = 8
-        self.hours_price = 10
         self.price_list = PriceList()
-
-    def saveEntry(self, client_id, client_name, client_surname, hoursCount, wereBoots):
-        self.entriesList.append(RaportEntry(client_id, client_name, client_surname, hoursCount, wereBoots))
-        if wereBoots == 'Tak':
-            self.money_from_boots += self.boots_price
-
-        self.money_from_hours = int(hoursCount) * self.hours_price
 
     def save_entry_to_data_base(self, customer_id, hours_count, were_boots):
         database_controller = DataBaseController("test.db")
@@ -66,11 +57,12 @@ class Bookkeeper:
         money_from_boots = 0
         money_from_hours = 0
 
-        pdfWriter.cell(0, 10, "data        id        ilosc_godzin        wartosc_godzin        lyzwy", border=0, ln=1)
+        pdfWriter.cell(0, 10, '''nr             data        id        ilosc_godzin        wartosc_godzin
+                lyzwy''', border=0, ln=1)
 
         nr = 1
         for raport_entry in cursor:
-            pdfWriter.cell(0, 10, "%s        %s        %s        %s        %s        %s" % (nr, raport_entry[1],
+            pdfWriter.cell(0, 10, "%s        %s        %s        %s                   %s                    %s" % (nr, raport_entry[1],
                 raport_entry[2], raport_entry[3], raport_entry[4], raport_entry[5]), border=0, ln=1)
             money_from_hours += int(raport_entry[4])
             money_from_boots += int(raport_entry[5])

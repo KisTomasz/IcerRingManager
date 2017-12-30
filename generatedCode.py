@@ -226,11 +226,6 @@ class mainFrame(wx.Frame):
         hours_count = int(self.iceRingListCtrl.GetItem(idx, 4).GetText()) #hours_cout
         customer_id = int(self.iceRingListCtrl.GetItem(idx, 6).GetText()) #customer_id
         were_boots = True
-        self.bookkeeper.saveEntry(client_id=0,
-            client_name=name,
-            client_surname=surname,
-            wereBoots=boots_taken,
-            hoursCount=hours_count)
 
         if boots_taken == 'Tak':
             were_boots = True

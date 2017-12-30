@@ -1,19 +1,24 @@
 # -*- coding: utf-8 -*-
 
+from config_reader import read_prices_from_config_file
+
+
 class PriceList:
     # _________________________________________________
     def __init__(self):
+        self.prices_dict = read_prices_from_config_file()
+
         # cena ulgowego biletu
-        self.half_ticket = 5
+        self.half_ticket = self.prices_dict['ulgowy']
 
         # cena normalnego bietu
-        self.normal_ticket = 10
+        self.normal_ticket = self.prices_dict['normalny']
 
         # cena promocyjnego bietu
         self.promotion_ticket = 0
 
         # cena za łyżwy
-        self.boots = 7
+        self.boots = self.prices_dict['boots']
 
         # nazwa biletu tańszego
         self.half_ticket_name = "ulgowy"
@@ -35,3 +40,9 @@ class PriceList:
         else:
             return "Nie ma takiej nazwy"
 
+    def _read_price_list_from_config_file(self):
+        config_file = open("ceny.txt", "r")
+        lista = config_file.read()
+        config_file.close()
+        people = lista.split("\n")
+        people.remove("")
