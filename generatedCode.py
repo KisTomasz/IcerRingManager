@@ -161,7 +161,7 @@ class mainFrame(wx.Frame):
     def onNameEntered(self, evt):
         print self.nameTextCtrl.GetValue()
         enteredMsg = self.nameTextCtrl.GetValue()
-        dataBaseConroller = DataBaseController("test.db")
+        dataBaseConroller = DataBaseController()
         foundCursor = dataBaseConroller.findByName(enteredMsg)
 
         self.searchListCtrl.DeleteAllItems()
@@ -173,7 +173,7 @@ class mainFrame(wx.Frame):
     def onSurnamenEntered(self, evt):
         print self.surnameTextCtrl.GetValue()
         enteredMsg = self.surnameTextCtrl.GetValue()
-        dataBaseConroller = DataBaseController("test.db")
+        dataBaseConroller = DataBaseController()
         foundCursor = dataBaseConroller.findBySurname(enteredMsg)
 
         self.searchListCtrl.DeleteAllItems()

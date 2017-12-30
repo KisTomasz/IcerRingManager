@@ -1,5 +1,6 @@
 import ConfigParser
 
+
 def read_prices_from_config_file():
     config = ConfigParser.RawConfigParser(allow_no_value=True)
     config.read('config.txt')
@@ -10,6 +11,9 @@ def read_prices_from_config_file():
     return price_dict
 
 
+def read_database_name_from_config_file():
+    config = ConfigParser.RawConfigParser(allow_no_value=True)
+    config.read('config.txt')
+    return config.get('baza_danych', 'nazwa')
 
-#print read_prices_from_config_file()
-
+# print read_prices_from_config_file()

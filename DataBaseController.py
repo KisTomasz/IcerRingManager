@@ -1,10 +1,10 @@
 #!/usr/bin/python
 import sqlite3
-
+import config_reader
 
 class DataBaseController:
-    def __init__(self, dataBaseName):
-        self.dataBaseName = dataBaseName
+    def __init__(self):
+        self.dataBaseName = config_reader.read_database_name_from_config_file()
         self.conn = sqlite3.connect(self.dataBaseName)
 
     def createCustomersTable(self):

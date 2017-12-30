@@ -6,7 +6,7 @@ import sys
 import random
 import time
 
-dataBaseConroller = DataBaseController("test.db")
+dataBaseConroller = DataBaseController()
 
 def fillDBFromFile():
     file = open("people.txt", "r")

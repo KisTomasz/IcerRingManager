@@ -20,10 +20,10 @@ def updateTimesOnParticipantList(listCtrl):
 
         if entryTimeDate + timedelta(hours=int(boughtHoursStr)) > currentDate:
             timeDiff = entryTimeDate + timedelta(hours=int(boughtHoursStr)) - currentDate
-            listCtrl.SetItemTextColour(index, wx.Colour(0, 0, 0));
+            listCtrl.SetItemTextColour(index, wx.Colour(0, 0, 0))
         else:
             timeDiff = currentDate - entryTimeDate + timedelta(hours=int(boughtHoursStr))
-            listCtrl.SetItemTextColour(index, wx.Colour(255, 0, 0));
+            listCtrl.SetItemTextColour(index, wx.Colour(255, 0, 0))
 
         listCtrl.SetStringItem(index, 5, str(timeDiff))
         index += 1
@@ -102,7 +102,7 @@ class AddNewClientDialog(wx.Dialog):
         name = self.m_textCtrl5.GetValue()
         surname = self.m_textCtrl4.GetValue()
         ticketType = self.m_choice1.GetString(self.m_choice1.GetCurrentSelection())
-        dataBaseConroller = DataBaseController("test.db")
+        dataBaseConroller = DataBaseController()
         dataBaseConroller.insertCustomer(name, surname, ticketType)
         self.Destroy()
 
@@ -159,7 +159,7 @@ class ModifyClientDataDialog(wx.Dialog):
         m_sdbSizer1.AddButton(self.m_sdbSizer1OK)
         self.m_sdbSizer1Cancel = wx.Button(self, wx.ID_CANCEL)
         m_sdbSizer1.AddButton(self.m_sdbSizer1Cancel)
-        m_sdbSizer1.Realize();
+        m_sdbSizer1.Realize()
 
         bSizer5.Add(m_sdbSizer1, 1, wx.EXPAND, 5)
 
@@ -179,7 +179,7 @@ class ModifyClientDataDialog(wx.Dialog):
         new_name = self.m_textCtrl5.GetValue()
         new_surname = self.m_textCtrl4.GetValue()
         new_ticket_type = self.m_choice1.GetStringSelection()
-        dataBaseConroller = DataBaseController("test.db")
+        dataBaseConroller = DataBaseController()
         print id
         dataBaseConroller.modifyCustomerName(id=id, name=new_name)
         dataBaseConroller.modifyCustomerSurname(id=id, surname=new_surname)
@@ -294,7 +294,7 @@ class CustomEntryDialog(wx.Dialog):
 
     def onCustomEntryAccepted(self, evt):
         #ściągnąć imię, nazwisko, łyżwy, ilość godzin oraz bilet
-        dataBaseConroller = DataBaseController("test.db")
+        dataBaseConroller = DataBaseController()
 
         id = self.id_obj.GetText()
         name = self.nameObj.GetText()

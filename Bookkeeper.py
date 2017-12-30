@@ -14,7 +14,7 @@ class Bookkeeper:
         self.price_list = PriceList()
 
     def save_entry_to_data_base(self, customer_id, hours_count, were_boots):
-        database_controller = DataBaseController("test.db")
+        database_controller = DataBaseController()
         date = time.strftime("%Y-%m-%d")
         ticket_type = self.people_onBoard[customer_id]
         ticket_cost = self.price_list.getTicketPriceByName(ticket_type)
@@ -51,7 +51,7 @@ class Bookkeeper:
         # print "BOUGHT_HOURS = ", row[3]
         # print "HOURS_COST = ", row[4]
         # print "BOOTS_COST = ", row[5], "\n"
-        database_controller = DataBaseController("test.db")
+        database_controller = DataBaseController()
         cursor = database_controller.getAllEntries()
 
         money_from_boots = 0

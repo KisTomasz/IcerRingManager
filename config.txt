@@ -2,3 +2,6 @@
 normalny = 10
 ulgowy = 5
 buty = 7
+
+[baza_danych]
+nazwa = test.db
