@@ -341,8 +341,8 @@ class CustomEntryDialog(wx.Dialog):
         ticket_cost = self.bookkeper.price_list.getTicketPriceByName(selected_ticket_type)
 
         boots_cost = 0
-        if selected_boots_option == 'Tak' and not selected_ticket_type == 'promocja':
-            boots_cost = self.bookkeper.price_list.boots
+        if selected_boots_option == 'Tak':
+            boots_cost = self.bookkeper.price_list.boots * seleceted_hours_count
 
         hours_cost = ticket_cost * seleceted_hours_count
         total_cost = hours_cost + boots_cost

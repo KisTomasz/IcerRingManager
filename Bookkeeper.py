@@ -19,8 +19,8 @@ class Bookkeeper:
         ticket_type = self.people_onBoard[customer_id]
         ticket_cost = self.price_list.getTicketPriceByName(ticket_type)
         boots_cost = 0
-        if were_boots and not ticket_cost == 0:
-            boots_cost = self.price_list.boots
+        if were_boots:
+            boots_cost = self.price_list.boots * hours_count
 
         hours_cost = hours_count * ticket_cost
 

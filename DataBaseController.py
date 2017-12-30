@@ -126,4 +126,4 @@ class DataBaseController:
 
     def __del__(self):
         self.conn.close()
-        print " deletion of database controller"
+        # print " deletion of database controller"
