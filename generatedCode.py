@@ -134,7 +134,7 @@ class mainFrame(wx.Frame):
         self.menubar.Append(self.mainMenu, u"Menu")
 
         self.raportsMenu = wx.Menu()
-        self.dummyMenuItem = wx.MenuItem(self.raportsMenu, wx.ID_ANY, u"raport sesji", wx.EmptyString, wx.ITEM_NORMAL)
+        self.dummyMenuItem = wx.MenuItem(self.raportsMenu, wx.ID_ANY, u"generuj raport", wx.EmptyString, wx.ITEM_NORMAL)
         self.raportsMenu.AppendItem(self.dummyMenuItem)
 
         self.menubar.Append(self.raportsMenu, u"Raporty")
@@ -278,7 +278,7 @@ class mainFrame(wx.Frame):
 if __name__ == "__main__":
     # wxGlade default stuff
     app = wx.App()
-    wx.InitAllImageHandlers()
+    # wx.InitAllImageHandlers()
     mFrame = mainFrame(None)
     mFrame.Show()
     app.MainLoop()
