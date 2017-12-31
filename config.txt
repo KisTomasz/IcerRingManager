@@ -8,4 +8,4 @@ nazwa = test.db
 
 [przedzial_raportu]
 # 0 oznacza dzienny / 1 oznacza wszystko
-przedzial = 1
+przedzial = 0

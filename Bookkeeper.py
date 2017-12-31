@@ -70,14 +70,14 @@ class Bookkeeper:
 
         nr = 1
         entries_matrix = []
-        entries_matrix.append(['Lp.', 'data', 'id klienta', 'ilosc godzin', 'godziny [zl]', 'lyzwy [zl]'])
+        entries_matrix.append(['Lp.', 'data', 'id klienta', 'ilosc godzin', 'godziny [zl]', 'lyzwy [zl]', 'razem [zl]'])
         for raport_entry in cursor:
             # pdfWriter.cell(0, 10, "%s        %s        %s        %s                   %s                    %s" % (nr, raport_entry[1],
             #     raport_entry[2], raport_entry[3], raport_entry[4], raport_entry[5]), border=0, ln=1)
             money_from_hours += int(raport_entry[4])
             money_from_boots += int(raport_entry[5])
             nr += 1
-            entries_matrix.append(raport_entry)
+            entries_matrix.append(raport_entry + ((raport_entry[4] + raport_entry[5]),))
 
         added_money = money_from_boots + money_from_hours
 
