@@ -90,12 +90,12 @@ class AddNewClientDialog(wx.Dialog):
         m_sdbSizer1.AddButton(self.m_sdbSizer1OK)
         self.m_sdbSizer1Cancel = wx.Button(self, wx.ID_CANCEL)
         m_sdbSizer1.AddButton(self.m_sdbSizer1Cancel)
-        m_sdbSizer1.Realize();
+        m_sdbSizer1.Realize()
 
 
         bSizer5.Add(m_sdbSizer1, 1, wx.EXPAND, 5)
 
-        self.SetSizer(bSizer5)
+        self.SetSizerAndFit(bSizer5)
         self.Layout()
         # bSizer5.Fit(self) # commented to check later what is needed here
 
@@ -182,7 +182,7 @@ class ModifyClientDataDialog(wx.Dialog):
 
         bSizer5.Add(m_sdbSizer1, 1, wx.EXPAND, 5)
 
-        self.SetSizer(bSizer5)
+        self.SetSizerAndFit(bSizer5)
         self.Layout()
         # bSizer5.Fit(self) # commented to check later what is needed here
 
@@ -205,7 +205,7 @@ class ModifyClientDataDialog(wx.Dialog):
         dataBaseConroller.modifyCustomerSurname(id=id, surname=new_surname)
         dataBaseConroller.modifyCustomerTicketType(id=id, ticket_type=new_ticket_type)
         dataBaseConroller.modifyCustomerSchool(id=id, school_name=new_school)
-        print 'accepted'
+        # print 'accepted'
         self.Destroy()
 
 

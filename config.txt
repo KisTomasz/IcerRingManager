@@ -5,3 +5,7 @@ buty = 7
 
 [baza_danych]
 nazwa = test.db
+
+[przedzial_raportu]
+# 0 oznacza dzienny / 1 oznacza wszystko
+przedzial = 1

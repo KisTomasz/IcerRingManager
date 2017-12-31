@@ -16,4 +16,9 @@ def read_database_name_from_config_file():
     config.read('config.txt')
     return config.get('baza_danych', 'nazwa')
 
+def read_report_period_type():
+    config = ConfigParser.RawConfigParser(allow_no_value=True)
+    config.read('config.txt')
+    return int(config.get('przedzial_raportu', 'przedzial'))
+
 # print read_prices_from_config_file()

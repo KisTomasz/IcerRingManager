@@ -65,8 +65,9 @@ class DataBaseController:
             print "HOURS_COST = ", row[4]
             print "BOOTS_COST = ", row[5], "\n"
 
-    def getEntriesByDate(self):
-        cursor = self.conn.execute("SELECT * FROM entries")
+    def getEntriesByDate(self, date):
+        cursor = self.conn.execute("SELECT * FROM entries WHERE date LIKE ?", (date,))
+        return cursor
 
     def dropEntriesTable(self):
         # TODO implement this type of table

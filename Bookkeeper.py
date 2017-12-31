@@ -3,7 +3,8 @@ from datetime import datetime
 from DataBaseController import DataBaseController
 from PriceList import PriceList
 import time
-
+import reportlabPdfPrinter
+import config_reader
 
 class Bookkeeper:
     def __init__(self):
@@ -41,10 +42,10 @@ class Bookkeeper:
         self.save_session_to_pdf()
 
     def save_session_to_pdf(self):
-        pdfWriter = PdfWriter()
-        pdfWriter.alias_nb_pages()
-        pdfWriter.set_font("Times", size=12)
-        pdfWriter.add_page()
+        # pdfWriter = PdfWriter()
+        # pdfWriter.alias_nb_pages()
+        # pdfWriter.set_font("Times", size=12)
+        # pdfWriter.add_page()
         # print "ENTRY_ID = ", row[0]
         # print "DATE = ", row[1]
         # print "CUSTOMER_ID = ", row[2]
@@ -52,29 +53,43 @@ class Bookkeeper:
         # print "HOURS_COST = ", row[4]
         # print "BOOTS_COST = ", row[5], "\n"
         database_controller = DataBaseController()
-        cursor = database_controller.getAllEntries()
+
+        if config_reader.read_report_period_type() == 0:
+            current_date = datetime.now().strftime('%Y-%m-%d')
+            cursor = database_controller.getEntriesByDate(current_date)
+            file_name = 'raport_' + current_date
+        else:
+            cursor = database_controller.getAllEntries()
+            file_name = 'raport_wszystko'
 
         money_from_boots = 0
         money_from_hours = 0
 
-        pdfWriter.cell(0, 10, '''nr             data        id        ilosc_godzin        wartosc_godzin
-                lyzwy''', border=0, ln=1)
+        # pdfWriter.cell(0, 10, '''nr             data        id        ilosc_godzin        wartosc_godzin
+        #         lyzwy''', border=0, ln=1)
 
         nr = 1
+        entries_matrix = []
+        entries_matrix.append(['Lp.', 'data', 'id klienta', 'ilosc godzin', 'godziny [zl]', 'lyzwy [zl]'])
         for raport_entry in cursor:
-            pdfWriter.cell(0, 10, "%s        %s        %s        %s                   %s                    %s" % (nr, raport_entry[1],
-                raport_entry[2], raport_entry[3], raport_entry[4], raport_entry[5]), border=0, ln=1)
+            # pdfWriter.cell(0, 10, "%s        %s        %s        %s                   %s                    %s" % (nr, raport_entry[1],
+            #     raport_entry[2], raport_entry[3], raport_entry[4], raport_entry[5]), border=0, ln=1)
             money_from_hours += int(raport_entry[4])
             money_from_boots += int(raport_entry[5])
             nr += 1
+            entries_matrix.append(raport_entry)
 
         added_money = money_from_boots + money_from_hours
 
-        pdfWriter.cell(0, 10, "Zysk za wypozyczenia: %s zlotch" % money_from_boots, border=0, ln=1)
-        pdfWriter.cell(0, 10, "Zysk za godziny: %s zlotych" % money_from_hours, border=0, ln=1)
-        pdfWriter.cell(0, 10, "Razem: %s zlotych" % added_money, border=0, ln=1)
-
-        pdfWriter.output("raport.pdf")
+        # pdfWriter.cell(0, 10, "Zysk za wypozyczenia: %s zlotch" % money_from_boots, border=0, ln=1)
+        # pdfWriter.cell(0, 10, "Zysk za godziny: %s zlotych" % money_from_hours, border=0, ln=1)
+        # pdfWriter.cell(0, 10, "Razem: %s zlotych" % added_money, border=0, ln=1)
+        #
+        # pdfWriter.output("raport.pdf")
+        costs = [['Lyzwy [zl]', str(money_from_boots)],
+                 ['Godziny [zl]', str(money_from_hours)],
+                ['Razem [zl]', str(added_money)]]
+        reportlabPdfPrinter.print_data_to_pdf(file_name, entries_matrix, costs)
 
 class RaportEntry:
     def __init__(self, client_id, client_name, client_surname, hours_count, were_boots):
