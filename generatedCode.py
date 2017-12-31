@@ -47,9 +47,11 @@ class mainFrame(wx.Frame):
         boxSizerForDataEntry = wx.BoxSizer(wx.HORIZONTAL)
 
         self.surnameTextCtrl = wx.TextCtrl(self, wx.ID_ANY, u"Nazwisko...", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.surnameTextCtrl.SetFont(wx.Font(13, 74, 90, 90, False, "Arial"))
         boxSizerForDataEntry.Add(self.surnameTextCtrl, 1, wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT | wx.ALL, 5)
 
         self.nameTextCtrl = wx.TextCtrl(self, wx.ID_ANY, u"Imię...", wx.DefaultPosition, wx.DefaultSize, 0)
+        self.nameTextCtrl.SetFont(wx.Font(13, 74, 90, 90, False, "Arial"))
         boxSizerForDataEntry.Add(self.nameTextCtrl, 1, wx.ALL | wx.EXPAND, 5)
 
         leftSideGridSizer.Add(boxSizerForDataEntry, 1, wx.ALIGN_CENTER | wx.ALIGN_CENTER_HORIZONTAL | wx.EXPAND, 5)
@@ -114,6 +116,7 @@ class mainFrame(wx.Frame):
         counterBSizer.Add(self.peopleCounterStaticText, 0, wx.TOP, 5)
 
         self.peopleCounterTextCtrl = wx.TextCtrl(self, wx.ID_ANY, '0', wx.DefaultPosition, wx.DefaultSize, wx.TE_READONLY)
+        self.peopleCounterTextCtrl.SetFont(wx.Font(13, 74, 90, 90, False, "Arial"))
 
         counterBSizer.Add(self.peopleCounterTextCtrl, 0, wx.ALL, 5) # dupa
 
