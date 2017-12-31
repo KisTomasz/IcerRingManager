@@ -88,7 +88,7 @@ class AddNewClientDialog(wx.Dialog):
         m_sdbSizer1 = wx.StdDialogButtonSizer()
         self.m_sdbSizer1OK = wx.Button(self, wx.ID_OK)
         m_sdbSizer1.AddButton(self.m_sdbSizer1OK)
-        self.m_sdbSizer1Cancel = wx.Button(self, wx.ID_CANCEL)
+        self.m_sdbSizer1Cancel = wx.Button(self, wx.ID_CANCEL, 'Anuluj')
         m_sdbSizer1.AddButton(self.m_sdbSizer1Cancel)
         m_sdbSizer1.Realize()
 
@@ -176,7 +176,7 @@ class ModifyClientDataDialog(wx.Dialog):
         m_sdbSizer1 = wx.StdDialogButtonSizer()
         self.m_sdbSizer1OK = wx.Button(self, wx.ID_OK)
         m_sdbSizer1.AddButton(self.m_sdbSizer1OK)
-        self.m_sdbSizer1Cancel = wx.Button(self, wx.ID_CANCEL)
+        self.m_sdbSizer1Cancel = wx.Button(self, wx.ID_CANCEL, 'Anuluj')
         m_sdbSizer1.AddButton(self.m_sdbSizer1Cancel)
         m_sdbSizer1.Realize()
 
@@ -295,7 +295,7 @@ class CustomEntryDialog(wx.Dialog):
         m_sdbSizer1 = wx.StdDialogButtonSizer()
         self.m_sdbSizer1OK = wx.Button(self, wx.ID_OK)
         m_sdbSizer1.AddButton(self.m_sdbSizer1OK)
-        self.m_sdbSizer1Cancel = wx.Button(self, wx.ID_CANCEL)
+        self.m_sdbSizer1Cancel = wx.Button(self, wx.ID_CANCEL, 'Anuluj')
         m_sdbSizer1.AddButton(self.m_sdbSizer1Cancel)
         m_sdbSizer1.Realize();
 
